@@ -62,7 +62,7 @@ public class AbstractDisruptorTest
         final TNonblockingServerTransport socket = new TNonblockingServerSocket(new InetSocketAddress(HOST, SERVER_PORT));
         final TBinaryProtocol.Factory protocol = new TBinaryProtocol.Factory();
 
-        TDisruptorServer.Args args = new TDisruptorServer.Args(socket)
+        TDisruptorServer.Args args = new TDisruptorServer.Args(socket).numAcceptors(1000).numSelectors(30).numWorkersPerSelector(2)
                                                          .inputTransportFactory(new TFramedTransport.Factory())
                                                          .outputTransportFactory(new TFramedTransport.Factory())
                                                          .inputProtocolFactory(protocol)
@@ -154,6 +154,11 @@ public class AbstractDisruptorTest
         @Override
         public Response invoke(Request req) throws TException
         {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
             if (req.getArgType() == ArgType.INT)
             {
                 int arg1 = toInteger(req.arg1);

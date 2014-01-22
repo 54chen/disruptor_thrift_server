@@ -22,11 +22,11 @@ public class BenchmarkTest {
         BenchmarkTest bt = new BenchmarkTest();
         System.out.println("start");
         AbstractDisruptorTest.prepareTest(true);
-        //bt.start();
+        bt.start();
     }
     public void start()
     {
-        int threadCount = 1000;
+        int threadCount = 200;
 
         ThreadGroup group = new ThreadGroup("Benchmark");
         List<Thread> threads = new ArrayList<Thread>();
@@ -50,7 +50,7 @@ public class BenchmarkTest {
             while (f) {
                 i++;
                 try{
-                    Thread.sleep(1000);
+                    //Thread.sleep(500);
 
                     TTransport transport = new TFramedTransport(new TSocket("127.0.0.1", 8080));
                     if (!transport.isOpen())
@@ -65,8 +65,11 @@ public class BenchmarkTest {
                             .setOperationType(OperationType.ADD));
                     transport.close();
                  }catch (Exception e){
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                    continue;
                 }
+
                 Stat.getInstance().inc();
 
             }
